@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar una imagen</title>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <form method="post" id="formImage" action="http://localhost:8000/gallery/add/" enctype="multipart/form-data">
+        <input id="url" name="url" type="text" placeholder="Url" /><br />
+        <input id="name" name="name" type="text" placeholder="Nombre" /><br />
+        <input id="type"  name="type"  type="text" placeholder="Tipo" /><br />
+        <input id="description" name="description" type="description" placeholder="Descripción" /><br />
+        <input id="imageFile" name="imageFile" type="File" /><br />
+        <input id="send" name="send" type="submit" value="Adicionar" />
+        <a href="http://localhost:8000/gallery/viewImages">Cancelar</a>
+    </form>
+
+    <script>
+        $('form').submit(function(e) {
+            var formData = new FormData($('#formImage')[0]);
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function() {
+                    window.location = "http://localhost:8000/gallery/viewImages";
+                },
+            });
+            e.preventDefault();
+        });
+    </script>
+
+</body>
+</html>

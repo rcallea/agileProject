@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Galería de imágenes</title>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+            (function () {
+                $.getJSON( "http://localhost:8000/gallery/" ).done(function( data ) {
+                    $.each(data, function(i,item) {
+                        if (item.fields.imageFile=="" || item.fields.imageFile==undefined) {
+                            $("#images").prepend('<img src="' + item.fields.url + '" width="300px" height="300px">');
+                        } else {
+                            $("#images").prepend('<img src="http://localhost:8000/' + item.fields.imageFile + '" width="300px" height="300px">');
+                        }
+                    });
+                });
+            }) ();
+
+        (function() {
+            $.getJSON( "http://localhost:8000/gallery/isLogged" ).done(function( data ) {
+                if (data.message =="no") {
+                    $("#login_user").show();
+                    $("#register_user").show();
+                    $("#add_new_image").hide();
+                    $("#close_session").hide();
+                } else {
+                    $("#login_user").hide();
+                    $("#register_user").hide();
+                    $("#add_new_image").show();
+                    $("#close_session").show();
+                }
+            });
+            }) ();
+
+    	function logout() {
+                $.getJSON( "http://localhost:8000/gallery/logout" ).done(function( data ) {
+                    if (data.message == "ok") {
+                        window.location = "http://localhost:8000/gallery/viewImages";
+                    } else {
+                        alert("Se presentó un error al salir de la galería");
+                    }
+                });
+            }
+    </script>
+
+</head>
+<body>
+    <h3>Galería de imágenes</h3>
+    <a href="http://localhost:8000/gallery/loginUser" id="login_user">Login</a>
+    <a href="http://localhost:8000/gallery/registerUser" id="register_user">Registrar</a>
+    <a href="http://localhost:8000/gallery/addNewImage" id="add_new_image">Adicionar imagen</a>
+    <a href="#" id="close_session" onclick="logout();">Logout</a>
+    <div id="images"></div>
+</body>
+</html>
